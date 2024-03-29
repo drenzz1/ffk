@@ -1,0 +1,56 @@
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+
+                <div class="text-center">
+                  <img src="assets/ffj.jpeg"
+                       style="width: 185px;" alt="logo">
+                  <h4 class="mt-1 mb-5 pb-1">Federata e Futbollit te Kosoves</h4>
+                </div>
+
+                <form>
+                  <p>Please login to your account</p>
+
+                  <div class="form-outline mb-4">
+                    <input [(ngModel)]="authenticationRequest.username" type="email" id="form2Example11" class="form-control" placeholder=" Email address" name="username" />
+                    <label class="form-label" for="form2Example11">Email</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input [(ngModel)]="authenticationRequest.password" type="password" id="form2Example22" class="form-control" placeholder=" Password" name="password" />
+                    <label class="form-label" for="form2Example22">Password</label>
+                  </div>
+
+
+                  <div class="d-grid gap-2 col-6 mx-auto">
+                    <button (click)="login()" class="btn btn-light btn-lg btn-block"  type="button">Log
+                      in</button>
+                  </div>
+
+                  <div class="  d-grid gap-2 col-6 mx-auto text-danger badge">
+                    {{ERRORMSG}}
+                  </div>
+
+
+
+                </form>
+
+              </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h4 class="mb-4"></h4>
+                <p class="small mb-0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
