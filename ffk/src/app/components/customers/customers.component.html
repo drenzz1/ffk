@@ -1,1 +1,6 @@
-<p>customers works!</p>
+<div *ngIf="customers.length > 0">
+  <h2>Data from Backend</h2>
+  <ul>
+    <li *ngFor="let item of customers">{{ item | json }}</li>
+  </ul>
+</div>

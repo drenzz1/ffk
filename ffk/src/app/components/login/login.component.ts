@@ -24,7 +24,7 @@ export class LoginComponent {
       },
       error:(err)=>{
         if (err.error.statusCode===401){
-          this.ERRORMSG='  Email or password id i  ncorrect';
+          this.ERRORMSG='  Email or password is incorrect';
         }
 
       }
