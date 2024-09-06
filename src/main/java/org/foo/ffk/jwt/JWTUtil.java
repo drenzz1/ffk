@@ -4,23 +4,32 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+
 @Service
 public class JWTUtil {
 
-    private static final String SECRET_KEY =
-            "foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789";
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private long jwtExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
 
-
+    public String issueToken(String subject) {
+        return issueToken(subject, Map.of());
+    }
 
     public String issueToken(String subject, String ...scopes) {
         return issueToken(subject, Map.of("scopes", scopes));
@@ -34,19 +43,27 @@ public class JWTUtil {
     public String issueToken(
             String subject,
             Map<String, Object> claims) {
-        return Jwts
-                .builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuer("ANDY VESA DRENzzy")
-                .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(
-                        Date.from(
-                                Instant.now().plus(15, DAYS)
-                        )
-                )
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+       return buildToken(subject,claims,jwtExpiration);
+    }
+    public String generateRefreshToken(
+            String subject
+            ) {
+        return buildToken(subject,new HashMap<>(),refreshExpiration);
+    }
+    private String buildToken(String subject,
+                              Map<String, Object> claims,
+                              Long expiration){
+           return  Jwts.builder()
+            .setClaims(claims)
+            .setSubject(subject)
+            .setIssuer("dreni")
+            .setIssuedAt(Date.from(Instant.now()))
+            .setExpiration(
+                    new Date(System.currentTimeMillis()+expiration)
+            )
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
+
     }
 
     public String getSubject(String token) {
@@ -54,16 +71,18 @@ public class JWTUtil {
     }
 
     private Claims getClaims(String token) {
-        return Jwts
+        Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        return claims;
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public boolean isTokenValid(String jwt, String username) {

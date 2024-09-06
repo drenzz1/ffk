@@ -16,6 +16,7 @@ export class LoginComponent {
   }
 
   login() {
+    console.log('asefasef')
     this.ERRORMSG='';
     this.authService.login(this.authenticationRequest).subscribe({
       next:(authenticationResponse)=>{
